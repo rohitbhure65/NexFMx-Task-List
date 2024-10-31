@@ -45,8 +45,8 @@ export function Form<S extends z.ZodType<any, any>>({
             </button>
           )}
 
-          <style global jsx>{`
-            .form > * + * {
+          <style>{`
+            .form  * + * {
               margin-top: 1rem;
             }
           `}</style>
