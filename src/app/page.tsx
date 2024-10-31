@@ -29,6 +29,23 @@ export default async function Home() {
                   User ID: <code>{currentUser.id}</code>
                   <br />
                   User Role: <code>{currentUser.role}</code>
+                  <br />
+                  <Link href="/tasks">
+                    {" "}
+                    <button
+                      style={{
+                        background: "green",
+                        color: "white",
+                        padding: "1rem",
+                        marginTop: "10px",
+                        borderRadius: "1.5rem",
+                        border: "none",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Access Tasks
+                    </button>
+                  </Link>
                 </div>
               </>
             ) : (

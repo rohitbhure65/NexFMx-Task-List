@@ -8,8 +8,14 @@ export { FORM_ERROR } from "src/app/components/Form"
 export function TaskForm<S extends z.ZodType<any, any>>(props: FormProps<S>) {
   return (
     <Form<S> {...props}>
-      <LabeledTextField name="name" label="Name" placeholder="Name" type="text" />
-      <LabeledTextField name="name" label="Name" placeholder="Name" type="text" />
+      <LabeledTextField name="name" label="Name" placeholder="Enter Task Name" type="text" />
+      <LabeledTextField name="type" label="Type" placeholder="Enter Task Type" type="text" />
+      <LabeledTextField
+        name="description"
+        label="Description"
+        placeholder="Enter Task description"
+        type="text"
+      />
       {/* template: <__component__ name="__fieldName__" label="__Field_Name__" placeholder="__Field_Name__"  type="__inputType__" /> */}
     </Form>
   )

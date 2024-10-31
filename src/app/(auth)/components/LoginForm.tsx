@@ -1,4 +1,5 @@
 "use client"
+import styles from "../../styles/Login.module.css"
 import { AuthenticationError, PromiseReturnType } from "blitz"
 import Link from "next/link"
 import { LabeledTextField } from "src/app/components/LabeledTextField"
@@ -19,10 +20,11 @@ export const LoginForm = (props: LoginFormProps) => {
   const router = useRouter()
   const next = useSearchParams()?.get("next")
   return (
-    <>
+    <div className={styles.container}>
       <h1>Login</h1>
 
       <Form
+        className={styles.form}
         submitText="Login"
         schema={Login}
         initialValues={{ email: "", password: "" }}
@@ -47,8 +49,19 @@ export const LoginForm = (props: LoginFormProps) => {
           }
         }}
       >
-        <LabeledTextField name="email" label="Email" placeholder="Email" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
+        <LabeledTextField
+          name="email"
+          label="Email"
+          placeholder="Email"
+          className={styles.inputField}
+        />
+        <LabeledTextField
+          name="password"
+          label="Password"
+          placeholder="Password"
+          type="password"
+          className={styles.inputField}
+        />
         <div>
           <Link href={"/forgot-password"}>Forgot your password?</Link>
         </div>
@@ -57,6 +70,6 @@ export const LoginForm = (props: LoginFormProps) => {
       <div style={{ marginTop: "1rem" }}>
         Or <Link href="/signup">Sign Up</Link>
       </div>
-    </>
+    </div>
   )
 }
