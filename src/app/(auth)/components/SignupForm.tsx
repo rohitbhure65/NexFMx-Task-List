@@ -15,7 +15,7 @@ export const SignupForm = (props: SignupFormProps) => {
   const router = useRouter()
 
   return (
-    <section className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900 overflow-auto">
+    <section className="flex items-center justify-center h-screen overflow-auto">
       <div className="w-full max-w-sm p-6">
         <h1 className="text-xl font-bold mb-4">Create an Account</h1>
 

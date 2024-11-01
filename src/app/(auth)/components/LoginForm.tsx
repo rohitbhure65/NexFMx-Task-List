@@ -20,7 +20,7 @@ export const LoginForm = (props: LoginFormProps) => {
   const next = useSearchParams()?.get("next")
 
   return (
-    <section className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900">
+    <section className="flex items-center justify-center h-screen">
       <div className="w-full max-w-md p-8">
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
 
