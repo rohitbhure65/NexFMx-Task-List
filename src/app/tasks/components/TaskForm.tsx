@@ -1,11 +1,18 @@
-import React, { Suspense } from "react"
+import React from "react"
 import { Form, FormProps } from "src/app/components/Form"
 import { LabeledTextField } from "src/app/components/LabeledTextField"
-
+import LabeledCheckbox from "./LabeledCheckbox" // Import the new checkbox component
 import { z } from "zod"
+
 export { FORM_ERROR } from "src/app/components/Form"
 
 export function TaskForm<S extends z.ZodType<any, any>>(props: FormProps<S>) {
+  const statusOptions = [
+    { value: "Backlog", label: "Backlog" },
+    { value: "In Progress", label: "In Progress" },
+    { value: "Completed", label: "Completed" },
+  ]
+
   return (
     <div className="flex justify-center">
       <Form<S> {...props}>
@@ -14,10 +21,11 @@ export function TaskForm<S extends z.ZodType<any, any>>(props: FormProps<S>) {
         <LabeledTextField
           name="description"
           label="Description"
-          placeholder="Enter Task description"
+          placeholder="Enter Task Description"
           type="text"
         />
-        {/* template: <__component__ name="__fieldName__" label="__Field_Name__" placeholder="__Field_Name__"  type="__inputType__" /> */}
+        <LabeledTextField name="status" label="Status" isSelect={true} options={statusOptions} />
+        <LabeledCheckbox name="isActive" label="Is Active" defaultChecked={true} />
       </Form>
     </div>
   )

@@ -2,10 +2,13 @@ import { z } from "zod"
 
 // Schema for creating a task
 export const CreateTaskSchema = z.object({
-  name: z.string(),
-  type: z.string(),
+  name: z.string().min(1, "Task name is required"),
+  type: z.string().min(1, "Task type is required"),
   description: z.string().optional(),
-  // Define `template` with the appropriate type, e.g., z.string(), z.number(), etc.
+  status: z.enum(["Backlog", "In Progress", "Completed"]).default("Backlog"),
+  isActive: z.boolean().default(true),
+  createdBy: z.string().default("sysadmin"),
+  updatedBy: z.string().default("sysadmin"),
 })
 
 // Schema for updating a task, including the task `id`

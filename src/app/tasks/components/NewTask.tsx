@@ -14,7 +14,7 @@ export function New__ModelName() {
       schema={CreateTaskSchema}
       onSubmit={async (values: any) => {
         try {
-          const task = await createTaskMutation(values)
+          await createTaskMutation(values)
           router.push(`/tasks`)
         } catch (error: any) {
           console.error(error)

@@ -10,13 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div>
-      <p className="text-red-700">
-        <Link href={"/tasks/new"}>Create Task</Link>
-      </p>
-      <Suspense fallback={<div>Loading...</div>}>
-        <TasksList />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <TasksList />
+    </Suspense>
   )
 }
