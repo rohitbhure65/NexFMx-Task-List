@@ -11,11 +11,11 @@ export const CreateTaskSchema = z.object({
 // Schema for updating a task, including the task `id`
 export const UpdateTaskSchema = CreateTaskSchema.merge(
   z.object({
-    id: z.number(),
+    id: z.string(),
   })
 )
 
 // Schema for deleting a task, requiring only the task `id`
 export const DeleteTaskSchema = z.object({
-  id: z.number(),
+  id: z.string(),
 })
