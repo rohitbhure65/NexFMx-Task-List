@@ -44,7 +44,7 @@ export function Form<S extends z.ZodType<any, any>>({
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-primary-600 hover:bg-primary-700 text-black font-medium rounded-lg py-2.5 px-5 transition-colors duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+              className="max-w-md bg-blue-500 hover:bg-primary-700 text-white font-medium rounded-lg py-2.5 px-5 transition-colors duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
               {submitText}
             </button>
