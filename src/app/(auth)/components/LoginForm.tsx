@@ -37,6 +37,7 @@ export const LoginForm = (props: LoginFormProps) => {
             } else {
               router.push("/")
             }
+            router.push(`/tasks`)
           } catch (error: any) {
             if (error instanceof AuthenticationError) {
               return { [FORM_ERROR]: "Sorry, those credentials are invalid" }

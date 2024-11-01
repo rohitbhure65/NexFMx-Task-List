@@ -26,7 +26,7 @@ export const SignupForm = (props: SignupFormProps) => {
           try {
             await signupMutation(values)
             router.refresh()
-            router.push("/")
+            router.push(`/tasks`)
           } catch (error: any) {
             if (error.code === "P2002" && error.meta?.target?.includes("email")) {
               // This error comes from Prisma
