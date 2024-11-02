@@ -1,13 +1,14 @@
 "use client"
 import { usePaginatedQuery } from "@blitzjs/rpc"
 import Link from "next/link"
-import { format } from "date-fns"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import getTasks from "../queries/getTasks"
 import { useSearchParams } from "next/navigation"
+import { Route } from "next"
 
-const ITEMS_PER_PAGE = 100
+const ITEMS_PER_PAGE = 5
 
 export const TasksList = () => {
   const searchParams = useSearchParams()!
@@ -22,39 +23,30 @@ export const TasksList = () => {
   })
 
   const router = useRouter()
-  const [visibleDropdown, setVisibleDropdown] = useState<string | null>(null)
+  const pathname = usePathname()
 
-  const toggleDropdown = (id: string) => {
-    setVisibleDropdown((prev) => (prev === id ? null : id))
+  const goToPreviousPage = () => {
+    if (page > 0) {
+      const params = new URLSearchParams(searchParams)
+      params.set("page", (page - 1).toString())
+      router.push(`${pathname}?${params.toString()}` as Route)
+    }
   }
 
-  const closeDropdown = () => {
-    setVisibleDropdown(null)
-  }
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const dropdownElements = document.querySelectorAll(".dropdown-menu")
-      const isDropdown = Array.from(dropdownElements).some((dropdown) =>
-        dropdown.contains(event.target as Node)
-      )
-      if (!isDropdown) {
-        closeDropdown()
-      }
+  const goToNextPage = () => {
+    if (hasMore) {
+      const params = new URLSearchParams(searchParams)
+      params.set("page", (page + 1).toString())
+      router.push(`${pathname}?${params.toString()}` as Route)
     }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
-
-  const handlePageChange = (newPage: number) => {
-    router.push(`?page=${newPage}`)
   }
 
   const handleStatusFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setStatusFilter(event.target.value || null)
+    // Reset to the first page when the filter changes
+    const params = new URLSearchParams(searchParams)
+    params.set("page", "0")
+    router.push(`${pathname}?${params.toString()}` as Route)
   }
 
   return (
@@ -67,29 +59,12 @@ export const TasksList = () => {
                 <label htmlFor="simple-search" className="sr-only">
                   Search
                 </label>
-                <div className="relative w-full">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg
-                      aria-hidden="true"
-                      className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    id="simple-search"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="Search"
-                  />
-                </div>
+                <input
+                  type="text"
+                  id="simple-search"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Search"
+                />
               </form>
             </div>
             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
@@ -157,6 +132,65 @@ export const TasksList = () => {
                 ))}
               </tbody>
             </table>
+
+            <nav
+              className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 p-4"
+              aria-label="Table navigation"
+            >
+              <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                Showing{" "}
+                <span className="font-semibold text-gray-900 dark:text-white">{`${
+                  page * ITEMS_PER_PAGE + 1
+                }-${Math.min((page + 1) * ITEMS_PER_PAGE, ITEMS_PER_PAGE * 2 + 1)}`}</span>{" "}
+                of <span className="font-semibold text-gray-900 dark:text-white">{page}</span>
+              </span>
+              <ul className="inline-flex items-stretch -space-x-px">
+                <li>
+                  <button
+                    className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    onClick={goToPreviousPage}
+                    disabled={page === 0}
+                  >
+                    <span className="sr-only">Previous</span>
+                    <svg
+                      className="w-5 h-5"
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    onClick={goToNextPage}
+                    disabled={!hasMore}
+                  >
+                    <span className="sr-only">Next</span>
+                    <svg
+                      className="w-5 h-5"
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>
