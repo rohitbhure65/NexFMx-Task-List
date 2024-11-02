@@ -29,7 +29,7 @@ export function Form<S extends z.ZodType<any, any>>({
       render={({ handleSubmit, submitting, submitError }) => (
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 flex flex-col items-center justify-center bg-white max-w-lg dark:bg-gray-800 shadow-md rounded-lg p-8"
+          className="space-y-6 flex flex-col items-stretch justify-center bg-white max-w-md w-full dark:bg-gray-800 shadow-md rounded-lg p-6 sm:p-8"
           {...props}
         >
           {children}
@@ -44,7 +44,7 @@ export function Form<S extends z.ZodType<any, any>>({
             <button
               type="submit"
               disabled={submitting}
-              className="max-w-md bg-blue-500 hover:bg-primary-700 text-white font-medium rounded-lg py-2.5 px-5 transition-colors duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg py-2.5 px-5 transition-colors duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               {submitText}
             </button>
