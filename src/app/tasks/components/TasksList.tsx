@@ -1,5 +1,5 @@
 "use client"
-import { usePaginatedQuery } from "@blitzjs/rpc"
+import { usePaginatedQuery, useMutation } from "@blitzjs/rpc"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation"
 import getTasks from "../queries/getTasks"
 import { useSearchParams } from "next/navigation"
 import { Route } from "next"
-
+import deleteTask from "../mutations/deleteTask" // Import the delete mutation
 const ITEMS_PER_PAGE = 5
 
 export const TasksList = () => {
@@ -34,6 +34,7 @@ export const TasksList = () => {
   })
 
   const router = useRouter()
+  const [deleteTaskMutation] = useMutation(deleteTask)
   const pathname = usePathname()
 
   const goToPreviousPage = () => {
@@ -71,6 +72,16 @@ export const TasksList = () => {
     router.push(
       `${pathname}?${params.toString()}&search=${encodeURIComponent(searchTerm)}` as Route
     )
+  }
+
+  const handleDeleteTask = async (taskId: string) => {
+    try {
+      await deleteTaskMutation({ id: taskId }) // Call the delete mutation
+      router.refresh() // Reload the page or update the state to reflect changes
+    } catch (error) {
+      console.error("Failed to delete task", error)
+      alert("There was an error deleting the task. Please try again.")
+    }
   }
 
   return (
@@ -176,6 +187,7 @@ export const TasksList = () => {
                       </Link>
                       <button
                         type="button"
+                        onClick={() => handleDeleteTask(task.id)}
                         className="text-white bg-[#ff0e0e] hover:bg-[#ff0e0e]/90 focus:ring-4 focus:outline-none focus:ring-[#ff0e0e]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2"
                       >
                         <svg
