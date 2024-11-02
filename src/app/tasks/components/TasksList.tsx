@@ -22,7 +22,14 @@ export const TasksList = () => {
     take: ITEMS_PER_PAGE,
     where: {
       ...(statusFilter ? { status: statusFilter } : {}),
-      ...(searchTerm ? { name: { contains: searchTerm } } : {}),
+      ...(searchTerm
+        ? {
+            name: {
+              contains: searchTerm,
+              mode: "insensitive",
+            },
+          }
+        : {}),
     },
   })
 
@@ -99,9 +106,12 @@ export const TasksList = () => {
                 className="py-2 px-4 border border-gray-300 rounded-lg text-gray-900 dark:bg-gray-700 dark:text-gray-200"
               >
                 <option value="">Task Status</option>
-                <option value="Completed">Completed</option>
                 <option value="Backlog">Backlog</option>
+                <option value="To Do">To Do</option>
                 <option value="In Progress">In Progress</option>
+                <option value="Ready for Review">Ready for Review</option>
+                <option value="Back for Review">Back for Review</option>
+                <option value="Completed">Completed</option>
               </select>
             </div>
           </div>
