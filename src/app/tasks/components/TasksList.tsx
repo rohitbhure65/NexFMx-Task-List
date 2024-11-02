@@ -14,12 +14,16 @@ export const TasksList = () => {
   const searchParams = useSearchParams()!
   const page = Number(searchParams.get("page")) || 0
   const [statusFilter, setStatusFilter] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState<string>("")
 
   const [{ tasks, hasMore }] = usePaginatedQuery(getTasks, {
     orderBy: { id: "asc" },
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
-    where: statusFilter ? { status: statusFilter } : undefined,
+    where: {
+      ...(statusFilter ? { status: statusFilter } : {}),
+      ...(searchTerm ? { name: { contains: searchTerm } } : {}),
+    },
   })
 
   const router = useRouter()
@@ -49,19 +53,34 @@ export const TasksList = () => {
     router.push(`${pathname}?${params.toString()}` as Route)
   }
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value)
+  }
+
+  const handleSearchSubmit = (event: React.FormEvent) => {
+    event.preventDefault()
+    const params = new URLSearchParams(searchParams)
+    params.set("page", "0")
+    router.push(
+      `${pathname}?${params.toString()}&search=${encodeURIComponent(searchTerm)}` as Route
+    )
+  }
+
   return (
     <section className="mb-10">
       <div className="mx-auto max-w-screen-3xl px-4 lg:px-12">
         <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
             <div className="w-full md:w-1/2">
-              <form className="flex items-center">
+              <form className="flex items-center" onSubmit={handleSearchSubmit}>
                 <label htmlFor="simple-search" className="sr-only">
                   Search
                 </label>
                 <input
                   type="text"
                   id="simple-search"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Search"
                 />
@@ -147,7 +166,9 @@ export const TasksList = () => {
               <ul className="inline-flex items-stretch -space-x-px">
                 <li>
                   <button
-                    className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    className={`flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                      page === 0 ? "hidden" : ""
+                    }`}
                     onClick={goToPreviousPage}
                     disabled={page === 0}
                   >
@@ -169,7 +190,9 @@ export const TasksList = () => {
                 </li>
                 <li>
                   <button
-                    className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    className={`flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                      !hasMore ? "hidden" : ""
+                    }`}
                     onClick={goToNextPage}
                     disabled={!hasMore}
                   >
