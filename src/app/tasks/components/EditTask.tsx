@@ -21,8 +21,9 @@ export const EditTask = ({ taskId }: { taskId: string }) => {
   return (
     <>
       <div>
-        <h1>Edit Task {task.id}</h1>
-        <pre>{JSON.stringify(task, null, 2)}</pre>
+        <h1>
+          Edit Task <b>{task.name}</b>
+        </h1>
         <Suspense fallback={<div>Loading...</div>}>
           <TaskForm
             submitText="Update Task"
@@ -36,6 +37,7 @@ export const EditTask = ({ taskId }: { taskId: string }) => {
                 })
                 await setQueryData(updated)
                 router.refresh()
+                router.push(`/tasks`)
               } catch (error: any) {
                 console.error(error)
                 return {
