@@ -1,6 +1,7 @@
 "use client"
 import { Navbar } from "flowbite-react"
 import Image from "next/image"
+import Link from "next/link"
 
 export default function Navbar_home() {
   return (
@@ -16,10 +17,8 @@ export default function Navbar_home() {
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse className="lg:mr-40">
-        <Navbar.Link href="/" active>
-          Home
-        </Navbar.Link>
-        <Navbar.Link href="/tasks">Task</Navbar.Link>
+        <Link href="/">Home</Link>
+        <Link href="/tasks">Task</Link>
       </Navbar.Collapse>
     </Navbar>
   )
