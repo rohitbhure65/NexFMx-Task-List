@@ -12,10 +12,10 @@ export function New__ModelName() {
     <TaskForm
       submitText="Create Task"
       schema={CreateTaskSchema}
-      onSubmit={async (values) => {
+      onSubmit={async (values: any) => {
         try {
-          const task = await createTaskMutation(values)
-          router.push(`/tasks/${task.id}`)
+          await createTaskMutation(values)
+          router.push(`/tasks`)
         } catch (error: any) {
           console.error(error)
           return {

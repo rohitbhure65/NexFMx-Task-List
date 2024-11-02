@@ -18,45 +18,60 @@ export const LoginForm = (props: LoginFormProps) => {
   const [loginMutation] = useMutation(login)
   const router = useRouter()
   const next = useSearchParams()?.get("next")
-  return (
-    <>
-      <h1>Login</h1>
 
-      <Form
-        submitText="Login"
-        schema={Login}
-        initialValues={{ email: "", password: "" }}
-        onSubmit={async (values) => {
-          try {
-            await loginMutation(values)
-            router.refresh()
-            if (next) {
-              router.push(next as Route)
-            } else {
-              router.push("/")
-            }
-          } catch (error: any) {
-            if (error instanceof AuthenticationError) {
-              return { [FORM_ERROR]: "Sorry, those credentials are invalid" }
-            } else {
-              return {
-                [FORM_ERROR]:
-                  "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
+  return (
+    <section className="flex items-center justify-center h-screen">
+      <div className="w-full max-w-md p-8">
+        <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
+
+        <Form
+          submitText="Login"
+          schema={Login}
+          initialValues={{ email: "", password: "" }}
+          onSubmit={async (values) => {
+            try {
+              await loginMutation(values)
+              router.refresh()
+              if (next) {
+                router.push(next as Route)
+              } else {
+                router.push("/")
+              }
+              router.push(`/tasks`)
+            } catch (error: any) {
+              if (error instanceof AuthenticationError) {
+                return { [FORM_ERROR]: "Sorry, those credentials are invalid" }
+              } else {
+                return {
+                  [FORM_ERROR]:
+                    "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
+                }
               }
             }
-          }
-        }}
-      >
-        <LabeledTextField name="email" label="Email" placeholder="Email" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
-        <div>
-          <Link href={"/forgot-password"}>Forgot your password?</Link>
-        </div>
-      </Form>
+          }}
+        >
+          <LabeledTextField name="email" label="Email" placeholder="Email" className="mb-4" />
+          <LabeledTextField
+            name="password"
+            label="Password"
+            placeholder="Password"
+            type="password"
+            className="mb-4"
+          />
+          <div className="text-right mb-4">
+            <Link href="/forgot-password" className="text-blue-500 hover:underline">
+              Forgot your password?
+            </Link>
+          </div>
+        </Form>
 
-      <div style={{ marginTop: "1rem" }}>
-        Or <Link href="/signup">Sign Up</Link>
+        <div className="text-center mt-4">
+          Or{" "}
+          <Link href="/signup" className="text-blue-500 hover:underline">
+            <strong>Sign Up</strong>
+          </Link>
+        </div>
       </div>
-    </>
+    </section>
   )
 }

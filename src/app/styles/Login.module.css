@@ -1,0 +1,30 @@
+.container {
+  /* Overall container styles */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg,   #f0f4f8, #e0e8ef);
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.form {
+  /* Form styles */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.inputField {
+  /* Input field styles */
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

@@ -7,7 +7,7 @@ import { FORM_ERROR, TaskForm } from "./TaskForm"
 import { useMutation, useQuery } from "@blitzjs/rpc"
 import { useRouter } from "next/navigation"
 
-export const EditTask = ({ taskId }: { taskId: number }) => {
+export const EditTask = ({ taskId }: { taskId: string }) => {
   const [task, { setQueryData }] = useQuery(
     getTask,
     { id: taskId },
@@ -21,8 +21,9 @@ export const EditTask = ({ taskId }: { taskId: number }) => {
   return (
     <>
       <div>
-        <h1>Edit Task {task.id}</h1>
-        <pre>{JSON.stringify(task, null, 2)}</pre>
+        <h1>
+          Edit Task <b>{task.name}</b>
+        </h1>
         <Suspense fallback={<div>Loading...</div>}>
           <TaskForm
             submitText="Update Task"
@@ -36,6 +37,7 @@ export const EditTask = ({ taskId }: { taskId: number }) => {
                 })
                 await setQueryData(updated)
                 router.refresh()
+                router.push(`/tasks`)
               } catch (error: any) {
                 console.error(error)
                 return {
