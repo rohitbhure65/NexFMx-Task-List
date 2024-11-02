@@ -32,16 +32,28 @@ export const LabeledTextField = forwardRef<
   const normalizedError = Array.isArray(error) ? error.join(", ") : error || submitError
 
   return (
-    <div {...outerProps}>
-      <label {...labelProps}>
+    <div {...outerProps} className="flex flex-col">
+      <label {...labelProps} className="flex flex-col text-sm mb-2">
         {label}
         {type === "checkbox" ? (
-          <div className="flex items-center">
-            <input type="checkbox" {...input} disabled={submitting} ref={ref} {...props} />
-            <span className="ml-2">{label}</span>
+          <div className="flex items-center mt-2">
+            <input
+              type="checkbox"
+              {...input}
+              disabled={submitting}
+              ref={ref}
+              className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <span className="ml-2 text-sm">{label}</span>
           </div>
         ) : isSelect ? (
-          <select {...input} disabled={submitting} ref={ref} {...props}>
+          <select
+            {...input}
+            disabled={submitting}
+            ref={ref}
+            {...props}
+            className="mt-2 border border-purple-400 rounded p-2 text-sm"
+          >
             {options?.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -49,33 +61,21 @@ export const LabeledTextField = forwardRef<
             ))}
           </select>
         ) : (
-          <input {...input} disabled={submitting} {...props} ref={ref} />
+          <input
+            {...input}
+            disabled={submitting}
+            {...props}
+            ref={ref}
+            className="mt-2 border border-purple-400 rounded p-2 text-sm"
+          />
         )}
       </label>
 
       {touched && normalizedError && (
-        <div role="alert" style={{ color: "red" }}>
+        <div role="alert" className="text-red-500 text-sm mt-1">
           {normalizedError}
         </div>
       )}
-
-      <style jsx>{`
-        label {
-          display: flex;
-          flex-direction: column;
-          align-items: start;
-          font-size: 1rem;
-        }
-        input,
-        select {
-          font-size: 1rem;
-          padding: 0.25rem 0.5rem;
-          border-radius: 3px;
-          border: 1px solid purple;
-          appearance: none;
-          margin-top: 0.5rem;
-        }
-      `}</style>
     </div>
   )
 })
