@@ -12,12 +12,16 @@ export function TaskForm<S extends z.ZodType<any, any>>(props: FormProps<S>) {
     { value: "In Progress", label: "In Progress" },
     { value: "Completed", label: "Completed" },
   ]
-
+  const TypeOptions = [
+    { value: "Bug", label: "Bug" },
+    { value: "Enhancement", label: "Enhancement" },
+    { value: "Feature", label: "Feature" },
+  ]
   return (
     <div className="flex justify-center">
       <Form<S> {...props}>
         <LabeledTextField name="name" label="Name" placeholder="Enter Task Name" type="text" />
-        <LabeledTextField name="type" label="Type" placeholder="Enter Task Type" type="text" />
+        <LabeledTextField name="type" label="Type" isSelect={true} options={TypeOptions} />
         <LabeledTextField
           name="description"
           label="Description"
