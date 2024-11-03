@@ -76,8 +76,10 @@ export const TasksList = () => {
 
   const handleDeleteTask = async (taskId: string) => {
     try {
-      await deleteTaskMutation({ id: taskId }) // Call the delete mutation
-      router.refresh() // Reload the page or update the state to reflect changes
+      if (window.confirm("This will be deleted")) {
+        await deleteTaskMutation({ id: taskId })
+        router.refresh()
+      }
     } catch (error) {
       console.error("Failed to delete task", error)
       alert("There was an error deleting the task. Please try again.")
